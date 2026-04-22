@@ -31,8 +31,8 @@ public class SimilarityClient {
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<Api<SimilarityResponse>>() {})
                 .block(); // 동기 처리
-        if (response != null && response.getPayload() != null) {
-            SimilarityResponse data = response.getPayload().getData();
+        if (response != null && response.getBody() != null) {
+            SimilarityResponse data = response.getBody();
             log.info("[FastAPI 응답 완료] 결과 데이터: {},{},", data.getDist(), data.getRanking());
             return data;
         } else {
