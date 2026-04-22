@@ -1,7 +1,6 @@
-package org.leximatch.game.infra.persistence.entity;
+package org.leximatch.game.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
