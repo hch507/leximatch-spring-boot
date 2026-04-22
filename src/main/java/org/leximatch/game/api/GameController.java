@@ -2,9 +2,7 @@ package org.leximatch.game.api;
 
 import lombok.RequiredArgsConstructor;
 import org.leximatch.game.domain.service.GameService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,5 +14,10 @@ public class GameController {
     @GetMapping("/today")
     public String getTodayWord() {
         return gameService.getTodayAnswer();
+    }
+
+    @GetMapping("/guess") // PostMapping -> GetMapping으로 변경
+    public void guess(@RequestParam String input) {
+        gameService.guess(input);
     }
 }
