@@ -1,6 +1,6 @@
 package org.leximatch.game.infra.persistence.repository;
 
-import org.leximatch.game.infra.persistence.entity.DailyWordEntity;
+import org.leximatch.game.domain.entity.DailyWordEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
