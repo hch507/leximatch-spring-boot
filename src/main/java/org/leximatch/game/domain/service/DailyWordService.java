@@ -15,7 +15,7 @@ public class DailyWordService {
 
     @Cacheable("dailyWord")
     public String getTodayWord() {
-        return dailyWordRepository.findByDate(LocalDate.now())
+        return dailyWordRepository.findByDateWithWord(LocalDate.now())
                 .map(dw -> dw.getWord().getValue())
                 .orElseThrow(() -> new RuntimeException("오늘의 단어 없음"));
     }
