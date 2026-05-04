@@ -16,12 +16,20 @@ public class DailyWordScheduler {
     private final DailyWordService dailyWordService;
     private final DailyWordSyncClient dailyWordSyncClient;
 
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+//    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+@Scheduled(cron = "*/20 * * * * *", zone = "Asia/Seoul")
     public void syncTodayWordToFastApi() {
+        try {
+            String todayWord = dailyWordService.createTodayWordIfAbsent();
 
-        String todayWord = dailyWordService.getTodayWord();
-        log.info("syncTodayWordToFastApi text {}",todayWord);
-        dailyWordSyncClient.syncDailyWord(todayWord);
+            log.info("[오늘의 단어 생성/조회 완료] word={}", todayWord);
+
+            dailyWordSyncClient.syncDailyWord(todayWord);
+
+            log.info("[오늘의 단어 FastAPI 캐싱 완료] word={}", todayWord);
+        }catch (Exception e){
+            log.error("오늘의 단어 FastAPI 동기화 실패", e);
+        }
     }
 
 }
