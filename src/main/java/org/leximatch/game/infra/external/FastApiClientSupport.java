@@ -74,6 +74,8 @@ public class FastApiClientSupport {
                     "FastAPI 호출 실패"
             );
 
+        } catch (ApiException e) {
+            throw e;  // ⭐ 그대로 전달
         } catch (Exception e) {
 
             log.error("[FastAPI 알 수 없는 오류] path={}, elapsed={}ms",
@@ -94,6 +96,13 @@ public class FastApiClientSupport {
             throw new ApiException(ErrorCode.FAST_API_INVALID_RESPONSE);
         }
 
-        return response.getBody();
+        int resultCode = response.getResult().getResultCode();
+        String description = response.getResult().getResultDescription();
+
+        return switch (resultCode) {
+            case 200 -> response.getBody();
+            case 4003 -> throw new ApiException(ErrorCode.WORD_NOT_IN_DICTIONARY, description);
+            default -> throw new ApiException(ErrorCode.FAST_API_ERROR, description);
+        };
     }
 }

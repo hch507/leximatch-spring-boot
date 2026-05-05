@@ -1,7 +1,9 @@
 package org.leximatch.game.api;
 
 import lombok.RequiredArgsConstructor;
-import org.leximatch.game.domain.service.GameService;
+import org.leximatch.game.api.response.GuessResponse;
+import org.leximatch.game.application.service.GameService;
+import org.leximatch.game.common.api.Api;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +19,8 @@ public class GameController {
     }
 
     @GetMapping("/guess") // PostMapping -> GetMapping으로 변경
-    public void guess(@RequestParam String input) {
-        gameService.guess(input);
+    public Api<GuessResponse> guess(@RequestParam String input) {
+        GuessResponse result = gameService.guess(input);
+        return Api.OK(result);
     }
 }

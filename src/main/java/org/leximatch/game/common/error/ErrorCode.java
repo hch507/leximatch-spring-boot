@@ -32,8 +32,9 @@ public enum ErrorCode implements ErrorCodeIfs{
 
     FAST_API_ERROR(HttpStatus.BAD_GATEWAY.value(), 5020, "FAST_API_ERROR"),
     FAST_API_TIMEOUT(HttpStatus.GATEWAY_TIMEOUT.value(), 5021, "FAST_API_TIMEOUT"),
-    FAST_API_INVALID_RESPONSE(HttpStatus.BAD_GATEWAY.value(), 5022, "FAST_API_INVALID_RESPONSE");
+    FAST_API_INVALID_RESPONSE(HttpStatus.BAD_GATEWAY.value(), 5022, "FAST_API_INVALID_RESPONSE"),
 
+    WORD_NOT_IN_DICTIONARY(HttpStatus.BAD_REQUEST.value(),6001,"WORD_NOT_IN_DICTIONARY");
 
     private final Integer httpStatusCode;
 
