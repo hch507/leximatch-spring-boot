@@ -1,9 +1,8 @@
 package org.leximatch.game.infra.scheduler;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.leximatch.game.domain.service.DailyWordService;
+import org.leximatch.game.application.service.DailyWordService;
 import org.leximatch.game.infra.external.client.DailyWordSyncClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package org.leximatch.game.domain.service;
+package org.leximatch.game.application.service;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.transaction.annotation.Transactional;

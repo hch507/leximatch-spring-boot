@@ -1,7 +1,7 @@
 package org.leximatch.game;
 
 import lombok.RequiredArgsConstructor;
-import org.leximatch.game.domain.service.DailyWordService;
+import org.leximatch.game.application.service.DailyWordService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
