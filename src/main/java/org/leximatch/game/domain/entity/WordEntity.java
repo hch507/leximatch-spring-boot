@@ -3,6 +3,9 @@ package org.leximatch.game.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -15,4 +18,7 @@ public class WordEntity {
 
     private String value;
 
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }
