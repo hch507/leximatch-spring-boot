@@ -16,8 +16,8 @@ public class DailyWordScheduler {
     private final DailyWordService dailyWordService;
     private final DailyWordSyncClient dailyWordSyncClient;
 
-//    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
-@Scheduled(cron = "*/20 * * * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+//@Scheduled(cron = "*/20 * * * * *", zone = "Asia/Seoul")
     public void syncTodayWordToFastApi() {
         try {
             String todayWord = dailyWordService.createTodayWordIfAbsent();
