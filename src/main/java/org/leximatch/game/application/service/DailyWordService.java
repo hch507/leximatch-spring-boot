@@ -1,5 +1,6 @@
 package org.leximatch.game.application.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +12,10 @@ import org.leximatch.game.infra.persistence.repository.DailyWordRepository;
 import org.leximatch.game.infra.persistence.repository.WordRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
+import java.time.ZoneId;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DailyWordService {
@@ -21,11 +23,14 @@ public class DailyWordService {
     private final DailyWordRepository dailyWordRepository;
     private final WordRepository wordRepository;
 
-    @CacheEvict(value = "dailyWord", allEntries = true)
+    private static final ZoneId KST = ZoneId.of("Asia/Seoul");
+
+    @CacheEvict(value = "dailyWord", allEntries = true, beforeInvocation = true)
     @Transactional
     public String createTodayWordIfAbsent() {
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(KST);
 
+        log.info("[시간 word={}", today);
         return dailyWordRepository.findByDateWithWord(today)
                 .map(dailyWord -> dailyWord.getWord().getValue())
                 .orElseGet(() -> {
@@ -42,7 +47,8 @@ public class DailyWordService {
     @Transactional(readOnly = true)
     @Cacheable("dailyWord")
     public String getTodayWord() {
-        return dailyWordRepository.findByDateWithWord(LocalDate.now())
+        LocalDate today = LocalDate.now(KST);
+        return dailyWordRepository.findByDateWithWord(today)
                 .map(dw -> dw.getWord().getValue())
                 .orElseThrow(() ->  new ApiException(ErrorCode.DAILY_WORD_NOT_FOUND));
     }
