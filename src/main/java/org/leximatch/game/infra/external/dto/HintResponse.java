@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HintResponse {
     private String word;
-    private String similarityScore;
+    private String dist;
     private String ranking;
 }

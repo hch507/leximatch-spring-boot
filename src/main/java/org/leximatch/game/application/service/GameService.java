@@ -41,7 +41,7 @@ public class GameService {
         HintResponse hint = todayHintClient.getTodayHint(answer);
         return new HintResult(
           hint.getWord(),
-          hint.getSimilarityScore(),
+          hint.getDist(),
           hint.getRanking()
         );
     }
