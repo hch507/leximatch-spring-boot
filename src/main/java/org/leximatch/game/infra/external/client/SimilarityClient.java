@@ -19,8 +19,6 @@ public class SimilarityClient {
 
     public SimilarityResponse calculateSimilarity(String input, String answer) {
 
-        log.info("[유사도 요청] input={}, answer={}", input, answer);
-
         SimilarityResponse response = fastApiClientSupport.get(
                 "/similarity",
                 uriBuilder -> uriBuilder
