@@ -26,7 +26,7 @@ public class GameService {
     public GuessResult guess(String input) {
 
         String answer = dailyWordService.getTodayWord();
-        SimilarityResponse sim = similarityClient.calculateSimilarity(input, answer);
+        SimilarityResponse sim = similarityClient.calculateSimilarity(answer, input);
         return new GuessResult(
                 input,
                 sim.getDist(),
