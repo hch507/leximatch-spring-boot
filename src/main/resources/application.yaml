@@ -14,3 +14,9 @@ spring:
 
 fastapi:
   url: ${FAST_API_URL}
+
+server:
+  tomcat:
+    threads:
+      max: 100
+      min-spare: 10
