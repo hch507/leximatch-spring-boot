@@ -6,6 +6,7 @@ import org.leximatch.game.common.api.Api;
 import org.leximatch.game.infra.external.FastApiClientSupport;
 import org.leximatch.game.infra.external.dto.HintResponse;
 import org.leximatch.game.infra.external.dto.SimilarityResponse;
+import org.leximatch.game.infra.external.dto.request.HintRequest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +17,19 @@ public class TodayHintClient {
     private final FastApiClientSupport fastApiClientSupport;
 
     public HintResponse getTodayHint(
-            String input
+            String input,
+            int minRank,
+            int maxRank
     ){
-        HintResponse response = fastApiClientSupport.get(
+        HintRequest request = new HintRequest(
+                input,
+                minRank,
+                maxRank
+        );
+
+        HintResponse response = fastApiClientSupport.post(
                 "/hint",
-                uriBuilder -> uriBuilder
-                        .path("/hint")
-                        .queryParam("target_word", input)
-                        .build(),
+                request,
                 new ParameterizedTypeReference<Api<HintResponse>>() {}
         );
 

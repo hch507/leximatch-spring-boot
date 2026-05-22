@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.leximatch.game.api.response.GuessResult;
 import org.leximatch.game.api.response.HintResult;
 import org.leximatch.game.common.util.ElapsedTimeProvider;
+import org.leximatch.game.domain.policy.hint.HintRankRange;
+import org.leximatch.game.domain.policy.hint.HintRankSelector;
 import org.leximatch.game.infra.external.client.SimilarityClient;
 import org.leximatch.game.infra.external.client.TodayHintClient;
 import org.leximatch.game.infra.external.dto.HintResponse;
@@ -18,6 +20,7 @@ public class GameService {
     private final SimilarityClient similarityClient;
     private final TodayHintClient todayHintClient;
     private final ElapsedTimeProvider elapsedTimeProvider;
+    private final HintRankSelector hintRankSelector;
 
     public String getTodayAnswer() {
         return dailyWordService.getTodayWord();
@@ -38,7 +41,14 @@ public class GameService {
     public HintResult getHint() {
 
         String answer = dailyWordService.getTodayWord();
-        HintResponse hint = todayHintClient.getTodayHint(answer);
+        HintRankRange range = hintRankSelector.select();
+
+        HintResponse hint = todayHintClient.getTodayHint(
+                answer,
+                range.minRank(),
+                range.maxRank()
+        );
+
         return new HintResult(
           hint.getWord(),
           hint.getDist(),
