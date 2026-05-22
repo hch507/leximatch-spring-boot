@@ -14,6 +14,8 @@ import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
 import java.util.function.Function;
+
+//Todo Get/Post 중복 예외처리 공통화 필요
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -75,10 +77,78 @@ public class FastApiClientSupport {
             );
 
         } catch (ApiException e) {
-            throw e;  // ⭐ 그대로 전달
+            throw e;
         } catch (Exception e) {
 
             log.error("[FastAPI 알 수 없는 오류] path={}, elapsed={}ms",
+                    path,
+                    System.currentTimeMillis() - start,
+                    e
+            );
+
+            throw new ApiException(
+                    ErrorCode.FAST_API_ERROR,
+                    "외부 서버 오류"
+            );
+        }
+    }
+    public <T, R> T post(
+            String path,
+            R requestBody,
+            ParameterizedTypeReference<Api<T>> typeRef
+    ) {
+        long start = System.currentTimeMillis();
+
+        try {
+            log.info("[FastAPI 요청] path={}", path);
+            Api<T> response = webClient.post()
+                    .uri(path)
+                    .bodyValue(requestBody)
+                    .retrieve()
+                    .bodyToMono(typeRef)
+                    .block();
+
+            log.info("[FastAPI POST 성공] path={}, elapsed={}ms",
+                    path,
+                    System.currentTimeMillis() - start
+            );
+
+            return extractBody(response);
+
+        } catch (WebClientRequestException e) {
+
+            log.error("[FastAPI POST 연결 실패] path={}, elapsed={}ms",
+                    path,
+                    System.currentTimeMillis() - start,
+                    e
+            );
+
+            throw new ApiException(
+                    ErrorCode.FAST_API_TIMEOUT,
+                    "FastAPI 서버 연결 실패"
+            );
+
+        } catch (WebClientResponseException e) {
+
+            log.error("[FastAPI POST HTTP 오류] path={}, elapsed={}ms, status={}, body={}",
+                    path,
+                    System.currentTimeMillis() - start,
+                    e.getStatusCode(),
+                    e.getResponseBodyAsString(),
+                    e
+            );
+
+            throw new ApiException(
+                    ErrorCode.FAST_API_ERROR,
+                    "FastAPI 호출 실패"
+            );
+
+        } catch (ApiException e) {
+            throw e;
+
+        } catch (Exception e) {
+
+            log.error("[FastAPI POST 알 수 없는 오류] path={}, elapsed={}ms",
                     path,
                     System.currentTimeMillis() - start,
                     e
