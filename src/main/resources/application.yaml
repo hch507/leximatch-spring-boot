@@ -1,6 +1,6 @@
 spring:
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       format_sql: true
       dialect: org.hibernate.dialect.MySQL8Dialect
@@ -20,3 +20,7 @@ server:
     threads:
       max: 100
       min-spare: 10
+
+logging:
+  request:
+    enabled: false
