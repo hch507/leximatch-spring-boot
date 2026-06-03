@@ -33,7 +33,7 @@ public class FastApiClientSupport {
         long start = System.currentTimeMillis();
 
         try {
-            log.info("[FastAPI 요청] path={}", path);
+//            log.info("[FastAPI 요청] path={}", path);
 
             Api<T> response = webClient.get()
                     .uri(uriFunction)
@@ -41,10 +41,10 @@ public class FastApiClientSupport {
                     .bodyToMono(typeRef)
                     .block();
 
-            log.info("[FastAPI 성공] path={}, elapsed={}ms",
-                    path,
-                    System.currentTimeMillis() - start
-            );
+//            log.info("[FastAPI 성공] path={}, elapsed={}ms",
+//                    path,
+//                    System.currentTimeMillis() - start
+//            );
 
             return extractBody(response);
 
@@ -100,7 +100,7 @@ public class FastApiClientSupport {
         long start = System.currentTimeMillis();
 
         try {
-            log.info("[FastAPI 요청] path={}", path);
+//            log.info("[FastAPI 요청] path={}", path);
             Api<T> response = webClient.post()
                     .uri(path)
                     .bodyValue(requestBody)
@@ -108,10 +108,10 @@ public class FastApiClientSupport {
                     .bodyToMono(typeRef)
                     .block();
 
-            log.info("[FastAPI POST 성공] path={}, elapsed={}ms",
-                    path,
-                    System.currentTimeMillis() - start
-            );
+//            log.info("[FastAPI POST 성공] path={}, elapsed={}ms",
+//                    path,
+//                    System.currentTimeMillis() - start
+//            );
 
             return extractBody(response);
 
