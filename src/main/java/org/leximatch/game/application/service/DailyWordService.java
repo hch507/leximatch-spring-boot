@@ -52,4 +52,13 @@ public class DailyWordService {
                 .map(dw -> dw.getWord().getValue())
                 .orElseThrow(() ->  new ApiException(ErrorCode.DAILY_WORD_NOT_FOUND));
     }
+
+    @Transactional(readOnly = true)
+    public DailyWordEntity getTodayDailyWord() {
+        LocalDate today = LocalDate.now(KST);
+
+        return dailyWordRepository.findByDateWithWord(today)
+                .orElseThrow(() -> new ApiException(ErrorCode.DAILY_WORD_NOT_FOUND));
+    }
+
 }
