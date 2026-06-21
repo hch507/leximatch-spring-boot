@@ -33,7 +33,20 @@ public class GameController {
         GuessResult result = gameService.guess(request);
         return Api.OK(result);
     }
+    @GetMapping("/guess")
+    public Api<GuessResult> guessByGet(
+            @RequestParam String input
+    ) {
 
+        GuessRequest request = new GuessRequest(
+                input,
+                null
+        );
+
+        GuessResult result = gameService.guess(request);
+
+        return Api.OK(result);
+    }
     @GetMapping("/hint")
     public Api<HintResult> getHint() {
 
