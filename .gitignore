@@ -39,3 +39,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Firebase Admin SDK
+src/main/resources/leximatch-77825-firebase-adminsdk-fbsvc-c0f625d686.json
