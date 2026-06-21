@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 
 
+//Todo : 추후 json 외부 파일 방식으로 리펙토링 필요
 @Configuration
 public class FirebaseConfig {
 
