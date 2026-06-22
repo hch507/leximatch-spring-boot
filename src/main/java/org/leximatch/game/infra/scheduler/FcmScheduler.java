@@ -22,7 +22,7 @@ public class FcmScheduler {
     private final FcmService fcmService;
     private final GameService gameService;
 
-    @Scheduled(cron = "0 10 11 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 12 * * *", zone = "Asia/Seoul")
     public void sendDailyNotification() {
         int failCount = 0;
 
@@ -33,7 +33,7 @@ public class FcmScheduler {
             try {
                 fcmService.send(
                         device.getFcmToken(),
-                        "LexiMatch",
+                        "Leximatch",
                         "오늘의 단어, 어디까지 가까워지셨나요?"
                 );
             } catch (Exception e) {
@@ -46,7 +46,7 @@ public class FcmScheduler {
         );
     }
 
-    @Scheduled(cron = "0 29 23 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 18 * * *", zone = "Asia/Seoul")
     public void sendHintNotification() {
 
         HintResult hint = gameService.getEpicHint();
@@ -57,7 +57,7 @@ public class FcmScheduler {
             try {
                 fcmService.send(
                         device.getFcmToken(),
-                        "LexiMatch",
+                        "Leximatch",
                         "오늘의 힌트! 단어 : " + hint.input()+ ", 순위 : "+ hint.ranking()
                 );
             } catch (FirebaseMessagingException ignored) {
