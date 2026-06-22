@@ -27,5 +27,5 @@ logging:
 
 app:
   version:
-      minVersion: 1.1.0
-      latestVersion: 1.2.0
+      minVersion: 1.2.0
+      latestVersion: 1.2.1
