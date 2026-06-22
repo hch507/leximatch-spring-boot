@@ -85,8 +85,8 @@ public class GameService {
 
         HintResponse hint = todayHintClient.getTodayHint(
                 answer,
-                51,
-                100
+                31,
+                70
         );
 
         return new HintResult(
