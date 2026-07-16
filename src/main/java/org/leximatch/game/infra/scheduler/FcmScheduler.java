@@ -33,7 +33,7 @@ public class FcmScheduler {
             try {
                 fcmService.send(
                         device.getFcmToken(),
-                        "Leximatch",
+                        "Momentle",
                         "오늘의 단어, 어디까지 가까워지셨나요?"
                 );
             } catch (Exception e) {
@@ -57,7 +57,7 @@ public class FcmScheduler {
             try {
                 fcmService.send(
                         device.getFcmToken(),
-                        "Leximatch",
+                        "Momentle",
                         "오늘의 힌트! 단어 : " + hint.input()+ ", 순위 : "+ hint.ranking()
                 );
             } catch (FirebaseMessagingException ignored) {
