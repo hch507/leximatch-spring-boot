@@ -37,7 +37,7 @@ pipeline {
                       --network leximatch-net \
                       --restart unless-stopped \
                       -p 8080:8080 \
-                      --env-file /home/ubuntu/apps/leximatch-spring/leximatch-spring-boot/.env \
+                      --env-file /run/secrets/spring.env \
                       leximatch-spring:${BUILD_NUMBER}
 
                     docker image prune -f
