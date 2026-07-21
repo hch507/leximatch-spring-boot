@@ -8,7 +8,14 @@ pipeline {
                 checkout scm
             }
         }
-
+        stage('Copy Firebase Key') {
+            steps {
+                sh '''
+                    cp /run/secrets/firebase/leximatch-77825-firebase-adminsdk-fbsvc-c0f625d686.json \
+                       src/main/resources/
+                '''
+            }
+        }
         stage('Build Spring') {
             steps {
                 sh '''
