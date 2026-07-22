@@ -31,22 +31,25 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def VERSION = sh(
-                        script: "grep '^version' build.gradle | cut -d\"'\" -f2",
+                    env.VERSION = sh(
+                        script: "awk -F\"'\" '/^version/ {print \$2}' build.gradle",
                         returnStdout: true
                     ).trim()
-                    sh '''
-                         docker build \
-                          -t leximatch-spring:${VERSION} \
+
+                    echo "VERSION=${env.VERSION}"
+
+                    sh """
+                        docker build \
+                          -t leximatch-spring:${env.VERSION} \
                           -t leximatch-spring:latest .
-                    '''
+                    """
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                sh '''
+                sh """
                     docker stop leximatch-spring || true
                     docker rm leximatch-spring || true
 
@@ -56,17 +59,17 @@ pipeline {
                       --restart unless-stopped \
                       -p 8080:8080 \
                       --env-file /run/secrets/spring.env \
-                      leximatch-spring:${VERSION}
+                      leximatch-spring:${env.VERSION}
 
                     docker image prune -f
-                '''
+                """
             }
         }
     }
 
     post {
         success {
-            echo "Spring Deploy Success! Version : ${VERSION}"
+            echo "Spring Deploy Success! Version : ${env.VERSION}"
         }
 
         failure {
