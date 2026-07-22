@@ -1,9 +1,7 @@
 pipeline {
     agent any
 
-    environment {
-        VERSION = ''
-    }
+
 
     stages {
 
@@ -12,17 +10,6 @@ pipeline {
                 checkout scm
             }
         }
-           stage('Read Version') {
-                    steps {
-                        script {
-                            VERSION = sh(
-                                script: "grep '^version' build.gradle | cut -d\"'\" -f2",
-                                returnStdout: true
-                            ).trim()
-                            echo "Build Version : ${VERSION}"
-                        }
-                    }
-                }
 
         stage('Copy Firebase Key') {
             steps {
@@ -43,6 +30,10 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                def VERSION = sh(
+                    script: "grep '^version' build.gradle | cut -d\"'\" -f2",
+                    returnStdout: true
+                ).trim()
                 sh '''
                      docker build \
                       -t leximatch-spring:${VERSION} \
