@@ -30,15 +30,17 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                def VERSION = sh(
-                    script: "grep '^version' build.gradle | cut -d\"'\" -f2",
-                    returnStdout: true
-                ).trim()
-                sh '''
-                     docker build \
-                      -t leximatch-spring:${VERSION} \
-                      -t leximatch-spring:latest .
-                '''
+                script {
+                    def VERSION = sh(
+                        script: "grep '^version' build.gradle | cut -d\"'\" -f2",
+                        returnStdout: true
+                    ).trim()
+                    sh '''
+                         docker build \
+                          -t leximatch-spring:${VERSION} \
+                          -t leximatch-spring:latest .
+                    '''
+                }
             }
         }
 
