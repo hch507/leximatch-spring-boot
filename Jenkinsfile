@@ -16,7 +16,7 @@ pipeline {
                     steps {
                         script {
                             VERSION = sh(
-                                script: "./gradlew properties -q | grep '^version:' | awk '{print \$2}'",
+                                script: "grep '^version' build.gradle | cut -d\"'\" -f2",
                                 returnStdout: true
                             ).trim()
                             echo "Build Version : ${VERSION}"
