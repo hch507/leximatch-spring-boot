@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        VERSION = ''
+    }
+
     stages {
 
         stage('Checkout') {
@@ -8,6 +12,18 @@ pipeline {
                 checkout scm
             }
         }
+           stage('Read Version') {
+                    steps {
+                        script {
+                            VERSION = sh(
+                                script: "./gradlew properties -q | grep '^version:' | awk '{print \$2}'",
+                                returnStdout: true
+                            ).trim()
+                            echo "Build Version : ${VERSION}"
+                        }
+                    }
+                }
+
         stage('Copy Firebase Key') {
             steps {
                 sh '''
@@ -28,7 +44,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    docker build -t leximatch-spring:${BUILD_NUMBER} .
+                     docker build \
+                      -t leximatch-spring:${VERSION} \
+                      -t leximatch-spring:latest .
                 '''
             }
         }
@@ -45,7 +63,7 @@ pipeline {
                       --restart unless-stopped \
                       -p 8080:8080 \
                       --env-file /run/secrets/spring.env \
-                      leximatch-spring:${BUILD_NUMBER}
+                      leximatch-spring:${VERSION}
 
                     docker image prune -f
                 '''
@@ -55,7 +73,7 @@ pipeline {
 
     post {
         success {
-            echo 'Spring Deploy Success!'
+            echo "Spring Deploy Success! Version : ${VERSION}"
         }
 
         failure {
