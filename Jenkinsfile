@@ -100,6 +100,7 @@ pipeline {
                 """
             }
         }
+    }
     post {
         success {
             echo "Spring Deploy Success! Version : ${env.VERSION}"
