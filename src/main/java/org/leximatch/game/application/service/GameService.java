@@ -4,23 +4,28 @@ import lombok.RequiredArgsConstructor;
 import org.leximatch.game.api.request.GuessRequest;
 import org.leximatch.game.api.response.GuessResult;
 import org.leximatch.game.api.response.HintResult;
+import org.leximatch.game.api.response.InitialHintResult;
 import org.leximatch.game.common.util.ElapsedTimeProvider;
 import org.leximatch.game.domain.policy.hint.HintRankRange;
 import org.leximatch.game.domain.policy.hint.HintRankSelector;
+import org.leximatch.game.infra.external.client.InitialHintClient;
 import org.leximatch.game.infra.external.client.SimilarityClient;
 import org.leximatch.game.infra.external.client.TodayHintClient;
 import org.leximatch.game.infra.external.dto.HintResponse;
+import org.leximatch.game.infra.external.dto.InitialHintResponse;
 import org.leximatch.game.infra.external.dto.SimilarityResponse;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class GameService {
+    private static final double INITIAL_HINT_WIN_RATE = 0.2;
     private final DailyWordService dailyWordService;
     private final DailyCorrectService dailyCorrectService;
 
     private final SimilarityClient similarityClient;
     private final TodayHintClient todayHintClient;
+    private final InitialHintClient initialHintClient;
     private final ElapsedTimeProvider elapsedTimeProvider;
     private final HintRankSelector hintRankSelector;
 
@@ -78,7 +83,28 @@ public class GameService {
         );
     }
 
+    public InitialHintResult getInitialHint() {
 
+        boolean isSuccess = Math.random() < INITIAL_HINT_WIN_RATE;
+
+        if (!isSuccess) {
+            return new InitialHintResult(
+                    false,
+                    null
+            );
+        }
+
+        // 당첨된 경우에만 FastAPI 호출
+        String answer = dailyWordService.getTodayWord();
+
+        InitialHintResponse hint =
+                initialHintClient.getInitialHint(answer);
+
+        return new InitialHintResult(
+                true,
+                hint.getInitial()
+        );
+    }
     public HintResult getEpicHint() {
 
         String answer = dailyWordService.getTodayWord();

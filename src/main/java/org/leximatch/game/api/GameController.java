@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.leximatch.game.api.request.GuessRequest;
 import org.leximatch.game.api.response.GuessResult;
 import org.leximatch.game.api.response.HintResult;
+import org.leximatch.game.api.response.InitialHintResult;
 import org.leximatch.game.application.service.FcmService;
 import org.leximatch.game.application.service.GameService;
 import org.leximatch.game.common.api.Api;
@@ -54,5 +55,13 @@ public class GameController {
 
         return Api.OK(result);
     }
+    @GetMapping("/initial-hint")
+    public Api<InitialHintResult> getInitialHint() {
+
+        InitialHintResult result = gameService.getInitialHint();
+
+        return Api.OK(result);
+    }
+
 
 }
