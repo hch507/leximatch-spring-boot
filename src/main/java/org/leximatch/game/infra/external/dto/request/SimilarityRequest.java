@@ -1,4 +1,4 @@
-package org.leximatch.game.infra.external.dto;
+package org.leximatch.game.infra.external.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
