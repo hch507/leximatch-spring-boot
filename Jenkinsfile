@@ -60,12 +60,12 @@ pipeline {
 //                       --env-file /run/secrets/spring.env \
 //                       leximatch-spring:${env.VERSION}
 //
-//                     docker network connect ai-net leximatch-spring
+//                     docker network connect ai-net leximatch-spring-1
 //                     docker image prune -f
 //                 """
 //             }
 //         }
-//     }
+
         // 개발
         stage('Deploy') {
             steps {
@@ -99,15 +99,16 @@ pipeline {
                 """
             }
         }
-    }
-    post {
-        success {
-            echo "Spring Deploy Success! Version : ${env.VERSION}"
-        }
 
-        failure {
-            echo 'Spring Deploy Failed!'
-            sh 'docker logs leximatch-spring || true'
+        post {
+            success {
+                echo "Spring Deploy Success! Version : ${env.VERSION}"
+            }
+
+            failure {
+                echo 'Spring Deploy Failed!'
+                sh 'docker logs leximatch-spring || true'
+            }
         }
     }
 }
