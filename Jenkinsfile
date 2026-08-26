@@ -65,7 +65,7 @@ pipeline {
 //                 """
 //             }
 //         }
-
+//      }
         // 개발
         stage('Deploy') {
             steps {
@@ -99,16 +99,16 @@ pipeline {
                 """
             }
         }
+    }
+    post {
+        success {
+            echo "Spring Deploy Success! Version : ${env.VERSION}"
+        }
 
-        post {
-            success {
-                echo "Spring Deploy Success! Version : ${env.VERSION}"
-            }
-
-            failure {
-                echo 'Spring Deploy Failed!'
-                sh 'docker logs leximatch-spring || true'
-            }
+        failure {
+            echo 'Spring Deploy Failed!'
+            sh 'docker logs leximatch-spring || true'
         }
     }
+
 }
