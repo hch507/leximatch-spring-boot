@@ -15,7 +15,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<Api<Object>> apiException(
             ApiException apiException
     ){
-//        log.error("", apiException);
+        log.error("", apiException);
 
         var errorCode = apiException.getErrorCodeIfs();
 
