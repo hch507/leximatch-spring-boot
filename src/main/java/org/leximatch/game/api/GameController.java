@@ -55,6 +55,14 @@ public class GameController {
 
         return Api.OK(result);
     }
+
+    @GetMapping("/opening-hint")
+    public Api<HintResult> getOpeningHint() {
+
+        HintResult result = gameService.getOpeningHint();
+
+        return Api.OK(result);
+    }
     @GetMapping("/initial-hint")
     public Api<InitialHintResult> getInitialHint() {
 

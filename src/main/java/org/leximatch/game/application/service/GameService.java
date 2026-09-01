@@ -83,6 +83,23 @@ public class GameService {
         );
     }
 
+    public HintResult getOpeningHint() {
+
+        String answer = dailyWordService.getTodayWord();
+
+        HintResponse hint = todayHintClient.getTodayHint(
+                answer,
+                300,
+                300
+        );
+
+        return new HintResult(
+                hint.getWord(),
+                hint.getDist(),
+                hint.getRanking()
+        );
+    }
+
     public InitialHintResult getInitialHint() {
 
         boolean isSuccess = Math.random() < INITIAL_HINT_WIN_RATE;
