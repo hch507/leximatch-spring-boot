@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GameService {
-    private static final double INITIAL_HINT_WIN_RATE = 0.15;
+    private static final double INITIAL_HINT_WIN_RATE = 0.1;
     private final DailyWordService dailyWordService;
     private final DailyCorrectService dailyCorrectService;
 
