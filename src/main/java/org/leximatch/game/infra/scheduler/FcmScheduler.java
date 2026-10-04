@@ -57,8 +57,8 @@ public class FcmScheduler {
             try {
                 fcmService.send(
                         device.getFcmToken(),
-                        "Momentle",
-                        "오늘의 힌트! 단어 : " + hint.input()+ ", 순위 : "+ hint.ranking()
+                        "Momantle",
+                        "오늘의 노말 모드 힌트! 단어 : " + hint.input()+ ", 순위 : "+ hint.ranking()
                 );
             } catch (FirebaseMessagingException ignored) {
 
