@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface DailyCorrectRepository
@@ -14,15 +15,26 @@ public interface DailyCorrectRepository
 
     @Query(
             value = """
-                SELECT id
-                FROM daily_correct
-                WHERE daily_word_id = :dailyWordId
-                AND device_id = :deviceId
-                LIMIT 1
-                """,
+                    SELECT id
+                    FROM daily_correct
+                    WHERE daily_word_id = :dailyWordId
+                    AND device_id = :deviceId
+                    LIMIT 1
+                    """,
             nativeQuery = true
     )
     Optional<Long> findIdByDailyWordIdAndDeviceId(
+            @Param("dailyWordId") Long dailyWordId,
+            @Param("deviceId") String deviceId
+    );
+
+    @Query("""
+                select dc
+                from DailyCorrectEntity dc
+                where dc.dailyWord.id = :dailyWordId
+                and dc.deviceId = :deviceId
+            """)
+    Optional<DailyCorrectEntity> findRecord(
             @Param("dailyWordId") Long dailyWordId,
             @Param("deviceId") String deviceId
     );
@@ -40,7 +52,7 @@ public interface DailyCorrectRepository
 
     @Modifying
     @Query(
-            value ="""
+            value = """
                 INSERT IGNORE INTO daily_correct (
                     daily_word_id,
                     device_id,
@@ -49,13 +61,14 @@ public interface DailyCorrectRepository
                 VALUES (
                     :dailyWordId,
                     :deviceId,
-                    NOW()
+                    :createdAt
                 )
                 """,
             nativeQuery = true
     )
     int insertIgnore(
             @Param("dailyWordId") Long dailyWordId,
-            @Param("deviceId") String deviceId
+            @Param("deviceId") String deviceId,
+            @Param("createdAt") LocalDateTime createdAt
     );
 }

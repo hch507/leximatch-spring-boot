@@ -8,6 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 @Service
@@ -17,15 +19,17 @@ public class DailyCorrectService {
 
     private final DailyCorrectRepository dailyCorrectRepository;
     private final DailyWordService dailyWordService;
-
+    private static final ZoneId KST = ZoneId.of("Asia/Seoul");
     public Long saveCorrect(String deviceId) {
+        LocalDateTime now = LocalDateTime.now(KST);
         DailyWordEntity todayDailyWord =
                 dailyWordService.getTodayDailyWord();
 
         // 기록 저장, 있으면 무시
         dailyCorrectRepository.insertIgnore(
                 todayDailyWord.getId(),
-                deviceId
+                deviceId,
+                now
         );
 
         Long correctId =
