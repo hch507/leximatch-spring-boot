@@ -2,16 +2,14 @@ package org.leximatch.game.common.util;
 
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 @Component
 public class ElapsedTimeProvider {
 
     private static final ZoneId KOREA_ZONE = ZoneId.of("Asia/Seoul");
 
+    // UTC 로 저장되어잇을시
     public String getElapsedTimeFromMidnight() {
 
         ZonedDateTime now = ZonedDateTime.now(KOREA_ZONE);
@@ -28,5 +26,18 @@ public class ElapsedTimeProvider {
         long ss = seconds % 60;
 
         return String.format("%02d:%02d:%02d", hh, mm, ss);
+    }
+
+    // 한국시간으로 저장되어잇을시
+    public String getElapsedTime(LocalDateTime createdAt) {
+
+        LocalTime time = createdAt.toLocalTime();
+
+        return String.format(
+                "%02d:%02d:%02d",
+                time.getHour(),
+                time.getMinute(),
+                time.getSecond()
+        );
     }
 }
