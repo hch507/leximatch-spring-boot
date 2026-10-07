@@ -2,6 +2,7 @@ package org.leximatch.game.infra.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.leximatch.game.application.service.DailyHardWordService;
 import org.leximatch.game.application.service.DailyWordService;
 import org.leximatch.game.infra.external.client.DailyWordSyncClient;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +15,7 @@ public class DailyWordScheduler {
 
     private final DailyWordService dailyWordService;
     private final DailyWordSyncClient dailyWordSyncClient;
+    private final DailyHardWordService dailyHardWordService;
 
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
 //@Scheduled(cron = "*/20 * * * * *", zone = "Asia/Seoul")
@@ -26,6 +28,13 @@ public class DailyWordScheduler {
             dailyWordSyncClient.syncDailyWord(todayWord);
 
             log.info("[오늘의 단어 FastAPI 캐싱 완료] word={}", todayWord);
+
+            String todayHardWord =
+                    dailyHardWordService.createTodayHardWordIfAbsent();
+
+            dailyWordSyncClient.syncDailyHardWord(todayHardWord);
+
+            log.info("[오늘의 Hard 단어 FastAPI 캐싱 완료] word={}", todayHardWord);
         }catch (Exception e){
             log.error("오늘의 단어 FastAPI 동기화 실패", e);
         }

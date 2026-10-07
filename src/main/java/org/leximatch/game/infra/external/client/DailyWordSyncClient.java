@@ -30,4 +30,19 @@ public class DailyWordSyncClient {
                 }
         );
     }
+
+    public void syncDailyHardWord(String input) {
+
+        log.info("[FastAPI Hard 요청] input: {}", input);
+
+        fastApiClientSupport.get(
+                "/cache/warmup",
+                uriBuilder -> uriBuilder
+                        .path("/cache/warmup")
+                        .queryParam("target_word", input)
+                        .build(),
+                new ParameterizedTypeReference<Api<Void>>() {
+                }
+        );
+    }
 }
