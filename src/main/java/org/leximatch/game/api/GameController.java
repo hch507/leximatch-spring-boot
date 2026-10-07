@@ -34,6 +34,16 @@ public class GameController {
         GuessResult result = gameService.guess(request);
         return Api.OK(result);
     }
+
+    @PostMapping("/hard-guess")
+    public Api<GuessResult> hardGuess(
+            @RequestBody GuessRequest request
+    ) {
+
+        GuessResult result = gameService.hardGuess(request);
+        return Api.OK(result);
+    }
+
     @GetMapping("/guess")
     public Api<GuessResult> guessByGet(
             @RequestParam String input
@@ -56,6 +66,14 @@ public class GameController {
         return Api.OK(result);
     }
 
+    @GetMapping("/hard_mode_hint")
+    public Api<HintResult> getHardModeHint() {
+
+        HintResult result = gameService.getHardModeHint();
+
+        return Api.OK(result);
+    }
+
     @GetMapping("/opening-hint")
     public Api<HintResult> getOpeningHint() {
 
@@ -67,6 +85,13 @@ public class GameController {
     public Api<InitialHintResult> getInitialHint() {
 
         InitialHintResult result = gameService.getInitialHint();
+
+        return Api.OK(result);
+    }
+    @GetMapping("/initial-hard-hint")
+    public Api<InitialHintResult> getInitialHardHint() {
+
+        InitialHintResult result = gameService.getInitialHardHint();
 
         return Api.OK(result);
     }

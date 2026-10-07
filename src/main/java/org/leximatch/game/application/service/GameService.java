@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 public class GameService {
     private static final double INITIAL_HINT_WIN_RATE = 0.1;
     private final DailyWordService dailyWordService;
+    private final DailyHardWordService dailyHardWordService;
     private final DailyCorrectService dailyCorrectService;
+    private final DailyHardCorrectService dailyHardCorrectService;
 
     private final SimilarityClient similarityClient;
     private final TodayHintClient todayHintClient;
@@ -64,6 +66,37 @@ public class GameService {
                 clearRank
         );
     }
+    public GuessResult hardGuess(GuessRequest request) {
+        String input = request.input();
+
+        String answer = dailyHardWordService.getTodayHardWord();
+
+        SimilarityResponse sim =
+                similarityClient.calculateSimilarity(
+                        answer,
+                        input
+                );
+
+        String clearRank = "NOT_CORRECT"; // 정답 아님
+
+        if (sim.getDist().equals("100.0")) {
+            try {
+                clearRank = dailyHardCorrectService.saveCorrect(
+                        request.deviceId()
+                ).toString();
+            } catch (Exception e) {
+                clearRank = "RANK_SAVE_FAILED"; //정답은 맞앗지만 랭킹 저장 실패
+            }
+        }
+
+        return new GuessResult(
+                input,
+                sim.getDist(),
+                sim.getRanking(),
+                elapsedTimeProvider.getElapsedTimeFromMidnight(),
+                clearRank
+        );
+    }
 
     public HintResult getHint() {
 
@@ -80,6 +113,24 @@ public class GameService {
           hint.getWord(),
           hint.getDist(),
           hint.getRanking()
+        );
+    }
+
+    public HintResult getHardModeHint() {
+
+        String answer = dailyHardWordService.getTodayHardWord();
+        HintRankRange range = hintRankSelector.select();
+
+        HintResponse hint = todayHintClient.getTodayHint(
+                answer,
+                range.minRank(),
+                range.maxRank()
+        );
+
+        return new HintResult(
+                hint.getWord(),
+                hint.getDist(),
+                hint.getRanking()
         );
     }
 
@@ -113,6 +164,28 @@ public class GameService {
 
         // 당첨된 경우에만 FastAPI 호출
         String answer = dailyWordService.getTodayWord();
+
+        InitialHintResponse hint =
+                initialHintClient.getInitialHint(answer);
+
+        return new InitialHintResult(
+                true,
+                hint.getInitial()
+        );
+    }
+
+    public InitialHintResult getInitialHardHint() {
+
+        boolean isSuccess = Math.random() < INITIAL_HINT_WIN_RATE;
+
+        if (!isSuccess) {
+            return new InitialHintResult(
+                    false,
+                    null
+            );
+        }
+
+        String answer = dailyHardWordService.getTodayHardWord();
 
         InitialHintResponse hint =
                 initialHintClient.getInitialHint(answer);
