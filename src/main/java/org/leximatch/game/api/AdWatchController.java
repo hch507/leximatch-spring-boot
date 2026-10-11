@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.leximatch.game.api.request.AdWatchSaveRequest;
 import org.leximatch.game.api.response.AdWatchResponse;
 import org.leximatch.game.application.service.AdWatchService;
+import org.leximatch.game.common.api.Api;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,11 +22,11 @@ public class AdWatchController {
     }
 
     @GetMapping("/today")
-    public AdWatchResponse getAdWatch(
+    public Api<AdWatchResponse> getAdWatch(
             @RequestParam("device_id") String deviceId
     ) {
         boolean adWatched = adWatchService.hasWatchedToday(deviceId);
 
-        return new AdWatchResponse(adWatched);
+        return Api.OK(new AdWatchResponse(adWatched));
     }
 }
