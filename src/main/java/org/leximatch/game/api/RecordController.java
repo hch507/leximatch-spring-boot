@@ -17,7 +17,7 @@ public class RecordController {
 
     @GetMapping
     public Api<HomeRecordResponse> getRecord(
-            @RequestParam String deviceId
+            @RequestParam("device_id") String deviceId
     ) {
         return Api.OK(recordService.getRecord(deviceId));
     }
