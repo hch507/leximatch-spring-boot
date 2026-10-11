@@ -8,21 +8,21 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/ad-watch")
+@RequestMapping("/api/ad")
 public class AdWatchController {
 
     private final AdWatchService adWatchService;
 
-    @PostMapping
+    @PostMapping("/save")
     public void saveAdWatch(
             @RequestBody AdWatchSaveRequest request
     ) {
         adWatchService.saveAdWatch(request.deviceId());
     }
 
-    @GetMapping
+    @GetMapping("/today")
     public AdWatchResponse getAdWatch(
-            @RequestParam String deviceId
+            @RequestParam("device_id") String deviceId
     ) {
         boolean adWatched = adWatchService.hasWatchedToday(deviceId);
 
