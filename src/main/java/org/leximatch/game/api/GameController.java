@@ -66,7 +66,7 @@ public class GameController {
         return Api.OK(result);
     }
 
-    @GetMapping("/hard_mode_hint")
+    @GetMapping("/hard-hint")
     public Api<HintResult> getHardModeHint() {
 
         HintResult result = gameService.getHardModeHint();
