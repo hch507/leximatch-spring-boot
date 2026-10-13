@@ -46,26 +46,59 @@ pipeline {
                 }
             }
         }
-        운영
-        stage('Deploy') {
-            steps {
-                sh """
-                    docker stop leximatch-spring-1 || true
-                                        docker rm leximatch-spring-1 || true
+//         운영
+//         stage('Deploy') {
+//             steps {
+//                 sh """
+//
+//                     docker stop leximatch-spring-1 || true
+//                                         docker rm leximatch-spring-1 || true
+//
+//                     docker run -d \
+//                       --name leximatch-spring-1 \
+//                       --network leximatch-net \
+//                       --restart unless-stopped \
+//                       --env-file /run/secrets/spring.env \
+//                       leximatch-spring:${env.VERSION}
+//
+//                     docker network connect ai-net leximatch-spring-1
+//                     docker image prune -f
+//                 """
+//             }
+//         }
+//
+//      }
+//           운영
+          stage('Deploy') {
+                    steps {
+                        sh """
+                            if docker container inspect leximatch-spring-backup >/dev/null 2>&1; then
+                                echo "ERROR: 기존 백업 컨테이너가 존재합니다."
+                                exit 1
+                            fi
 
-                    docker run -d \
-                      --name leximatch-spring-1 \
-                      --network leximatch-net \
-                      --restart unless-stopped \
-                      --env-file /run/secrets/spring.env \
-                      leximatch-spring:${env.VERSION}
+                            if docker container inspect leximatch-spring-1 >/dev/null 2>&1; then
+                                            docker stop leximatch-spring-1
+                                            docker rename leximatch-spring-1 leximatch-spring-backup
+                            fi
 
-                    docker network connect ai-net leximatch-spring-1
-                    docker image prune -f
-                """
-            }
-        }
-     }
+
+
+                            docker run -d \
+                              --name leximatch-spring-1 \
+                              --network leximatch-net \
+                              --restart unless-stopped \
+                              --env-file /run/secrets/spring.env \
+                              leximatch-spring:${env.VERSION}
+
+                            docker network connect ai-net leximatch-spring-1
+                            docker image prune -f
+                        """
+                    }
+                }
+
+          }
+
 //         // 개발
 //         stage('Deploy') {
 //             steps {
