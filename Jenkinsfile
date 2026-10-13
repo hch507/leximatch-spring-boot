@@ -161,18 +161,12 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    env.VERSION = sh(
-                        script: """awk -F '"' '/^[[:space:]]*version[[:space:]]*=/ {print \$2; exit}' build.gradle""",
-                        returnStdout: true
-                    ).trim()
+                 script {
+                            env.VERSION = '1.0.0'
+                            echo "VERSION=${env.VERSION}"
+                 }
 
-                    if (!env.VERSION) {
-                        error('build.gradle에서 버전을 찾을 수 없습니다.')
-                    }
 
-                    echo "VERSION=${env.VERSION}"
-                }
 
                 sh '''
                     docker build \
