@@ -15,10 +15,11 @@ public class AdWatchController {
     private final AdWatchService adWatchService;
 
     @PostMapping("/save")
-    public void saveAdWatch(
+    public Api<String> saveAdWatch(
             @RequestBody AdWatchSaveRequest request
     ) {
         adWatchService.saveAdWatch(request.deviceId());
+        return Api.OK("광고 시청 기록 저장 완료");
     }
 
     @GetMapping("/today")
