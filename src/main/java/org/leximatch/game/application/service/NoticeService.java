@@ -18,7 +18,7 @@ import java.time.ZoneId;
 public class NoticeService {
 
     private static final String DEFAULT_NOTICE =
-            "오늘도 모맨틀에\\n도전해보세요!";
+            "오늘도 모맨틀에 도전해보세요!";
 
     private final NoticeRepository noticeRepository;
     private static final ZoneId KST = ZoneId.of("Asia/Seoul");
