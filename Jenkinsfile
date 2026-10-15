@@ -47,27 +47,27 @@ pipeline {
             }
         }
 //         운영
-//         stage('Deploy') {
-//             steps {
-//                 sh """
-//
-//                     docker stop leximatch-spring-1 || true
-//                                         docker rm leximatch-spring-1 || true
-//
-//                     docker run -d \
-//                       --name leximatch-spring-1 \
-//                       --network leximatch-net \
-//                       --restart unless-stopped \
-//                       --env-file /run/secrets/spring.env \
-//                       leximatch-spring:${env.VERSION}
-//
-//                     docker network connect ai-net leximatch-spring-1
-//                     docker image prune -f
-//                 """
-//             }
-//         }
-//
-//      }
+        stage('Deploy') {
+            steps {
+                sh """
+
+                    docker stop leximatch-spring-1 || true
+                                        docker rm leximatch-spring-1 || true
+
+                    docker run -d \
+                      --name leximatch-spring-1 \
+                      --network leximatch-net \
+                      --restart unless-stopped \
+                      --env-file /run/secrets/spring.env \
+                      leximatch-spring:${env.VERSION}
+
+                    docker network connect ai-net leximatch-spring-1
+                    docker image prune -f
+                """
+            }
+        }
+
+     }
 //           운영
 //           stage('Deploy') {
 //                     steps {
@@ -100,28 +100,28 @@ pipeline {
 //           }
 
         // 개발
-        stage('Deploy') {
-            steps {
-                sh """
-                    docker stop leximatch-spring-1 || true
-                    docker rm leximatch-spring-1 || true
-
-
-                    # Spring 1
-                    docker run -d \
-                      --name leximatch-spring-1 \
-                      --network leximatch-net \
-                      --restart unless-stopped \
-                      --env-file /run/secrets/spring.env \
-                      leximatch-spring:${env.VERSION}
-
-                    docker network connect ai-net leximatch-spring-1
-
-                    docker image prune -f
-                """
-            }
-        }
-    }
+//         stage('Deploy') {
+//             steps {
+//                 sh """
+//                     docker stop leximatch-spring-1 || true
+//                     docker rm leximatch-spring-1 || true
+//
+//
+//                     # Spring 1
+//                     docker run -d \
+//                       --name leximatch-spring-1 \
+//                       --network leximatch-net \
+//                       --restart unless-stopped \
+//                       --env-file /run/secrets/spring.env \
+//                       leximatch-spring:${env.VERSION}
+//
+//                     docker network connect ai-net leximatch-spring-1
+//
+//                     docker image prune -f
+//                 """
+//             }
+//         }
+//     }
     post {
         success {
             echo "Spring Deploy Success! Version : ${env.VERSION}"
