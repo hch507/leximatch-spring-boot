@@ -5,7 +5,9 @@ public record GuessResult(
         String dist,
         String ranking,
         String elapsedTime,
-        String clearRank
+        String clearRank,
+        String timeScore,
+        String rankScore
 ) {
 
 }

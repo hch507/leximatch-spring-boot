@@ -6,6 +6,7 @@ import org.leximatch.game.api.response.GuessResult;
 import org.leximatch.game.api.response.HintResult;
 import org.leximatch.game.api.response.InitialHintResult;
 import org.leximatch.game.common.util.ElapsedTimeProvider;
+import org.leximatch.game.domain.dto.CorrectAnswerResult;
 import org.leximatch.game.domain.policy.hint.HintRankRange;
 import org.leximatch.game.domain.policy.hint.HintRankSelector;
 import org.leximatch.game.infra.external.client.InitialHintClient;
@@ -30,6 +31,8 @@ public class GameService {
     private final InitialHintClient initialHintClient;
     private final ElapsedTimeProvider elapsedTimeProvider;
     private final HintRankSelector hintRankSelector;
+    private final CorrectAnswerTransactionService
+            correctAnswerTransactionService;
 
     public String getTodayAnswer() {
         return dailyWordService.getTodayWord();
@@ -47,15 +50,25 @@ public class GameService {
                 );
 
         String clearRank = "NOT_CORRECT"; // 정답 아님
+        String timeScore = "0";
+        String rankScore = "0";
+//        if (sim.getDist().equals("100.0")) {
+//            try {
+//                clearRank = dailyCorrectService.saveCorrect(
+//                        request.deviceId()
+//                ).toString();
+//            } catch (Exception e) {
+//                clearRank = "RANK_SAVE_FAILED"; //정답은 맞앗지만 랭킹 저장 실패
+//            }
+//        }
+        if ("100.0".equals(sim.getDist())) {
+            CorrectAnswerResult result =
+                    correctAnswerTransactionService
+                            .processNormalCorrect(request.deviceId());
 
-        if (sim.getDist().equals("100.0")) {
-            try {
-                clearRank = dailyCorrectService.saveCorrect(
-                        request.deviceId()
-                ).toString();
-            } catch (Exception e) {
-                clearRank = "RANK_SAVE_FAILED"; //정답은 맞앗지만 랭킹 저장 실패
-            }
+            clearRank = String.valueOf(result.rank());
+            timeScore = String.valueOf(result.timeScore());
+            rankScore = String.valueOf(result.rankingScore());
         }
 
         return new GuessResult(
@@ -63,7 +76,9 @@ public class GameService {
                 sim.getDist(),
                 sim.getRanking(),
                 elapsedTimeProvider.getElapsedTimeFromMidnight(),
-                clearRank
+                clearRank,
+                timeScore,
+                rankScore
         );
     }
     public GuessResult hardGuess(GuessRequest request) {
@@ -78,15 +93,25 @@ public class GameService {
                 );
 
         String clearRank = "NOT_CORRECT"; // 정답 아님
+        String timeScore = "0";
+        String rankScore = "0";
+//        if (sim.getDist().equals("100.0")) {
+//            try {
+//                clearRank = dailyHardCorrectService.saveCorrect(
+//                        request.deviceId()
+//                ).toString();
+//            } catch (Exception e) {
+//                clearRank = "RANK_SAVE_FAILED"; //정답은 맞앗지만 랭킹 저장 실패
+//            }
+//        }
+        if ("100.0".equals(sim.getDist())) {
+            CorrectAnswerResult result =
+                    correctAnswerTransactionService
+                            .processHardCorrect(request.deviceId());
 
-        if (sim.getDist().equals("100.0")) {
-            try {
-                clearRank = dailyHardCorrectService.saveCorrect(
-                        request.deviceId()
-                ).toString();
-            } catch (Exception e) {
-                clearRank = "RANK_SAVE_FAILED"; //정답은 맞앗지만 랭킹 저장 실패
-            }
+            clearRank = String.valueOf(result.rank());
+            timeScore = String.valueOf(result.timeScore());
+            rankScore = String.valueOf(result.rankingScore());
         }
 
         return new GuessResult(
@@ -94,7 +119,9 @@ public class GameService {
                 sim.getDist(),
                 sim.getRanking(),
                 elapsedTimeProvider.getElapsedTimeFromMidnight(),
-                clearRank
+                clearRank,
+                timeScore,
+                rankScore
         );
     }
 
