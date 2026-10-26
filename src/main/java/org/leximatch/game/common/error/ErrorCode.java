@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 //6000번대 게임 도메인 오류
 @AllArgsConstructor
 @Getter
-public enum ErrorCode implements ErrorCodeIfs{
+public enum ErrorCode implements ErrorCodeIfs {
 
     OK(HttpStatus.OK.value(), 200, "SUCCESS"),
 
@@ -29,12 +29,29 @@ public enum ErrorCode implements ErrorCodeIfs{
 
     SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), 5000, "INTERNAL_SERVER_ERROR"),
     NULL_POINT(HttpStatus.INTERNAL_SERVER_ERROR.value(), 5002, "NULL_POINT"),
+    DAILY_CORRECT_SAVE_FAILED(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            5003,
+            "DAILY_CORRECT_SAVE_FAILED"
+    ),
+
+    RANK_HISTORY_QUERY_FAILED(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            5004,
+            "RANK_HISTORY_QUERY_FAILED"
+    ),
+
+    SCORE_SAVE_FAILED(
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            5005,
+            "SCORE_SAVE_FAILED"
+    ),
 
     FAST_API_ERROR(HttpStatus.BAD_GATEWAY.value(), 5020, "FAST_API_ERROR"),
     FAST_API_TIMEOUT(HttpStatus.GATEWAY_TIMEOUT.value(), 5021, "FAST_API_TIMEOUT"),
     FAST_API_INVALID_RESPONSE(HttpStatus.BAD_GATEWAY.value(), 5022, "FAST_API_INVALID_RESPONSE"),
 
-    WORD_NOT_IN_DICTIONARY(HttpStatus.BAD_REQUEST.value(),6001,"WORD_NOT_IN_DICTIONARY");
+    WORD_NOT_IN_DICTIONARY(HttpStatus.BAD_REQUEST.value(), 6001, "WORD_NOT_IN_DICTIONARY");
 
     private final Integer httpStatusCode;
 
