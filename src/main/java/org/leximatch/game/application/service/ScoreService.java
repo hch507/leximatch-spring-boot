@@ -2,6 +2,7 @@ package org.leximatch.game.application.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.leximatch.game.api.response.MonthlyScoreResponse;
 import org.leximatch.game.common.error.ErrorCode;
 import org.leximatch.game.common.exception.ApiException;
 import org.leximatch.game.domain.dto.ScoreResult;
@@ -102,5 +103,18 @@ public class ScoreService {
         } catch (DataAccessException e) {
             throw new ApiException(ErrorCode.SCORE_SAVE_FAILED);
         }
+    }
+
+    public MonthlyScoreResponse getMyMonthlyScore(String deviceId) {
+        String scoreMonth = LocalDate.now(KST).format(MONTH_FORMAT);
+
+        return monthlyScoreRepository
+                .findByDeviceIdAndScoreMonth(deviceId, scoreMonth)
+                .map(m -> new MonthlyScoreResponse(
+                        m.getTotalScore(),
+                        monthlyScoreRepository.findRank(scoreMonth, m.getTotalScore())
+                ))
+                // 이번 달 아직 정답이 없는 사용자: 0점, 순위 없음
+                .orElseGet(() -> new MonthlyScoreResponse(0, null));
     }
 }

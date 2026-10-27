@@ -2,7 +2,9 @@ package org.leximatch.game.api;
 
 import lombok.RequiredArgsConstructor;
 import org.leximatch.game.api.response.HomeRecordResponse;
+import org.leximatch.game.api.response.MonthlyScoreResponse;
 import org.leximatch.game.application.service.RecordService;
+import org.leximatch.game.application.service.ScoreService;
 import org.leximatch.game.common.api.Api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecordController {
     private final RecordService recordService;
 
+    private final ScoreService scoreService;
+
     @GetMapping
     public Api<HomeRecordResponse> getRecord(
             @RequestParam("device_id") String deviceId
     ) {
         return Api.OK(recordService.getRecord(deviceId));
+    }
+
+    @GetMapping("/monthly")
+    public Api<MonthlyScoreResponse> myMonthlyScore(
+            @RequestParam String deviceId
+    ) {
+        return Api.OK(scoreService.getMyMonthlyScore(deviceId));
     }
 }
