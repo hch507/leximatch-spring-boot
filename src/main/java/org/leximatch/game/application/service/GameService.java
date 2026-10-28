@@ -9,6 +9,7 @@ import org.leximatch.game.common.util.ElapsedTimeProvider;
 import org.leximatch.game.domain.dto.CorrectAnswerResult;
 import org.leximatch.game.domain.policy.hint.HintRankRange;
 import org.leximatch.game.domain.policy.hint.HintRankSelector;
+import org.leximatch.game.domain.policy.hint.InitialHintUtils;
 import org.leximatch.game.infra.external.client.InitialHintClient;
 import org.leximatch.game.infra.external.client.SimilarityClient;
 import org.leximatch.game.infra.external.client.TodayHintClient;
@@ -180,46 +181,61 @@ public class GameService {
 
     public InitialHintResult getInitialHint() {
 
-        boolean isSuccess = Math.random() < INITIAL_HINT_WIN_RATE;
-
-        if (!isSuccess) {
-            return new InitialHintResult(
-                    false,
-                    null
-            );
-        }
-
-        // 당첨된 경우에만 FastAPI 호출
+//        boolean isSuccess = Math.random() < INITIAL_HINT_WIN_RATE;
+//
+//        if (!isSuccess) {
+//            return new InitialHintResult(
+//                    false,
+//                    null
+//            );
+//        }
+//
+//        // 당첨된 경우에만 FastAPI 호출
+//        String answer = dailyWordService.getTodayWord();
+//
+//        InitialHintResponse hint =
+//                initialHintClient.getInitialHint(answer);
+//
+//        return new InitialHintResult(
+//                true,
+//                hint.getInitial()
+//        );
         String answer = dailyWordService.getTodayWord();
-
-        InitialHintResponse hint =
-                initialHintClient.getInitialHint(answer);
+        String initial = InitialHintUtils.extractInitials(answer);
 
         return new InitialHintResult(
                 true,
-                hint.getInitial()
+                initial
         );
     }
 
     public InitialHintResult getInitialHardHint() {
 
-        boolean isSuccess = Math.random() < INITIAL_HINT_WIN_RATE;
-
-        if (!isSuccess) {
-            return new InitialHintResult(
-                    false,
-                    null
-            );
-        }
+//        boolean isSuccess = Math.random() < INITIAL_HINT_WIN_RATE;
+//
+//        if (!isSuccess) {
+//            return new InitialHintResult(
+//                    false,
+//                    null
+//            );
+//        }
+//
+//        String answer = dailyHardWordService.getTodayHardWord();
+//
+//        InitialHintResponse hint =
+//                initialHintClient.getInitialHint(answer);
+//
+//        return new InitialHintResult(
+//                true,
+//                hint.getInitial()
+//        );
 
         String answer = dailyHardWordService.getTodayHardWord();
-
-        InitialHintResponse hint =
-                initialHintClient.getInitialHint(answer);
+        String initial = InitialHintUtils.extractInitials(answer);
 
         return new InitialHintResult(
                 true,
-                hint.getInitial()
+                initial
         );
     }
     public HintResult getEpicHint() {
