@@ -17,9 +17,6 @@ import java.time.ZoneId;
 @RequiredArgsConstructor
 public class NoticeService {
 
-    private static final String DEFAULT_NOTICE =
-            "오늘도 모맨틀에 도전해보세요!";
-
     private final NoticeRepository noticeRepository;
     private static final ZoneId KST = ZoneId.of("Asia/Seoul");
     @Transactional(readOnly = true)
@@ -31,7 +28,7 @@ public class NoticeService {
 
         String content = noticeRepository.findByNoticeDate(today)
                 .map(NoticeEntity::getContent)
-                .orElse(DEFAULT_NOTICE);
+                .orElse(null);
 
         return new NoticeResponse(content);
     }
