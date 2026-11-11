@@ -29,3 +29,13 @@ app:
   version:
       minVersion: 1.7.0
       latestVersion: 1.7.0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+  endpoint:
+    health:
+      show-details: never
